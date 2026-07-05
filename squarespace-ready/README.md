@@ -37,8 +37,25 @@ overflow, hamburger opens/closes correctly, grids stack cleanly, desktop nav/lay
 2. Add a **Code Block** to the page and paste the entire contents of the matching file into it.
 3. Set the page's **URL slug** to match the mapping above (e.g. `service-areas.html` → slug
    `service-areas`) so the nav links between pages resolve correctly.
-4. Set the page's **SEO title** manually in Page Settings — the original `<title>` tag is preserved
-   only as an HTML comment at the top of each fragment for reference.
+4. Set the page's **SEO Title** and **SEO Description** in Page Settings → SEO tab (see table below).
+   This works the same whether or not the header/footer are hidden — SEO fields live in the page's
+   `<head>`, which is separate from the visual template chrome. The original `<title>` tag is also
+   preserved as an HTML comment at the top of each fragment for reference.
+
+## SEO titles & descriptions
+Paste these into each page's **Page Settings → SEO tab** in Squarespace.
+
+| Page | Slug | SEO Title | SEO Description |
+|---|---|---|---|
+| Home | `/` | BigBoss Roofing LLC \| DFW Roofing & Storm Damage Experts | Residential and commercial roofing across Dallas-Fort Worth. 50+ years of experience, storm claim support, and lifetime warranty options. Free estimates. |
+| Services | `/services` | Roofing Services in DFW \| BigBoss Roofing LLC | Roof repairs, full replacements, inspections, metal & flat roofing, gutters, and storm damage services for homes and businesses across Dallas-Fort Worth. |
+| Storm Damage | `/storm-damage` | Storm Damage & Insurance Claims \| BigBoss Roofing LLC | Hail and wind damage inspections, photo documentation, and insurance claim assistance for DFW homeowners. Fast response for roof leaks and storm repairs. |
+| Financing | `/financing` | Roof Financing Options \| BigBoss Roofing LLC | Ask about Bank of America financing for qualified roofing projects. We review scope, warranty options, and next steps before work begins in DFW. |
+| Gallery | `/gallery` | Roofing Project Gallery \| BigBoss Roofing LLC | See completed roof replacements, storm repairs, gutters, and siding projects from BigBoss Roofing LLC across the Dallas-Fort Worth metroplex. |
+| FAQ | `/faq` | Roofing FAQs \| BigBoss Roofing LLC | Answers about service areas, free estimates, storm claim support, warranties, financing, and commercial roofing from BigBoss Roofing LLC in DFW. |
+| Service Areas | `/service-areas` | DFW Service Areas \| BigBoss Roofing LLC | BigBoss Roofing LLC serves Dallas, Fort Worth, Arlington, Irving, Garland, Plano, Grand Prairie, and the surrounding DFW metroplex. Call to confirm coverage. |
+| Contact | `/contact` | Contact BigBoss Roofing LLC \| DFW Roofing | Call, text, or email BigBoss Roofing LLC for roof inspections, repairs, storm claims, and free estimates across the Dallas-Fort Worth area. |
+| Estimate | `/estimate` | Request a Free Roofing Estimate \| BigBoss Roofing LLC | Get a free, no-obligation roof estimate from BigBoss Roofing LLC. Tell us about your project and we'll follow up fast, serving all of DFW. |
 
 ## Optional cleanup (not required, but recommended)
 Every fragment currently loads the same Google Fonts (`Saira Condensed`, `Archivo`) itself. If all
