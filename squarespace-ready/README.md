@@ -69,6 +69,29 @@ equivalent so the code-block sections feel consistent with the rest of the site.
 | service-areas.html | `/service-areas` | DFW Service Areas \| BigBoss Roofing LLC | BigBoss Roofing LLC serves Dallas, Fort Worth, Arlington, Irving, Garland, Plano, Grand Prairie, and the surrounding DFW metroplex. Call to confirm coverage. |
 | contact.html | `/contact` | Contact BigBoss Roofing LLC \| DFW Roofing | Call, text, or email BigBoss Roofing LLC for roof inspections, repairs, storm claims, and free estimates across the Dallas-Fort Worth area. |
 | estimate.html | `/estimate-request` | Request a Free Roofing Estimate \| BigBoss Roofing LLC | Get a free, no-obligation roof estimate from BigBoss Roofing LLC. Tell us about your project and we'll follow up fast, serving all of DFW. |
+| referral.html | *(not in original nav — set a slug, e.g. `/referral`)* | Referral Program \| BigBoss Roofing LLC | Refer a friend to BigBoss Roofing LLC and get $250 when their roof is complete. No limit on referrals — refer as many neighbors as you like. |
+
+## referral.html — bonus page, fixed from a draft
+This page wasn't part of the original 9. It was submitted separately as a draft and had three real
+bugs, found by actually loading it in a headless browser and testing it (not just reading the code):
+1. **The lead form didn't submit anywhere.** It validated fields and showed a fake "Referral
+   received!" success message, but no email, webhook, or form backend ever received the data — every
+   submission would have been silently lost. Fixed the same way as `estimate.html`: on submit it now
+   builds a `mailto:info@bigbossroofing.com` link with the referrer's and friend's info and hands off
+   to the visitor's email client, then shows the success state.
+2. **The header nav vanished completely on mobile** (`header nav{display:none!important}` below
+   900px) with no hamburger menu to replace it — confirmed via computed style at 375px and 414px.
+   Resolved by removing the custom header entirely and switching this page to the same
+   Squarespace-native-header pattern as the other 9 pages, so there's no custom nav to break.
+3. **A literal broken markdown link** — `[www.bigbossroofing.com](https://www.bigbossroofing.com)` —
+   was rendering as visible text in the "Refer in 30 seconds" sidebar instead of a clean link. Fixed
+   to plain "bigbossroofing.com" text (the real `<a href>` was already correct, only the visible text
+   was broken).
+
+The footer's legal disclaimer ("Referral reward is paid after the referred project is completed and
+paid in full...") was page-specific fine print, not generic site chrome, so it was preserved and
+moved into its own small section at the end of the content rather than deleted along with the rest
+of the footer.
 
 ## Optional cleanup (not required, but recommended)
 Every fragment currently loads the same Google Fonts (`Saira Condensed`, `Archivo`) itself. If all
