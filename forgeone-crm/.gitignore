@@ -1,0 +1,7 @@
+node_modules
+dist
+dist-ssr
+*.local
+env.json
+static/__dev/import
+.DS_Store

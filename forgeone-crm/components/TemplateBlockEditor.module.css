@@ -1,0 +1,148 @@
+@layer base {
+  .editorContainer {
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--spacing-3) var(--spacing-4);
+    background-color: color-mix(in srgb, var(--surface) 80%, black);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .headerInfo {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-3);
+  }
+
+  .title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0;
+    color: var(--foreground);
+    font-family: var(--font-family-display);
+  }
+
+  .typeBadge {
+    text-transform: capitalize;
+    font-size: 0.7rem;
+    padding: 0 var(--spacing-2);
+    height: 1.25rem;
+  }
+
+  .headerActions {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-1);
+  }
+
+  .fields {
+    padding: var(--spacing-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-4);
+  }
+
+  .fieldGroup {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2);
+    width: 100%;
+  }
+
+  .fieldGroupRow {
+    display: flex;
+    align-items: flex-end;
+    gap: var(--spacing-4);
+    width: 100%;
+  }
+
+  .fieldGroupRow > * {
+    flex: 1;
+  }
+
+  .fieldLabelRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .label {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--muted-foreground);
+  }
+
+  .tagBtn {
+    height: 1.5rem;
+    padding: 0 var(--spacing-2);
+    font-size: 0.75rem;
+    gap: var(--spacing-1);
+  }
+
+  .switchesGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: var(--spacing-3);
+    background-color: var(--muted);
+    padding: var(--spacing-3);
+    border-radius: var(--radius);
+  }
+
+  .fieldGroupToggle {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+  }
+
+  .inlineLabel {
+    font-size: 0.8125rem;
+    font-weight: 400;
+    color: var(--foreground);
+    cursor: pointer;
+  }
+
+  .signatureList {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-3);
+  }
+
+  .signatureLineEditor {
+    display: flex;
+    align-items: flex-end;
+    gap: var(--spacing-3);
+    background-color: var(--muted);
+    padding: var(--spacing-3);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+  }
+
+  .removeSigBtn {
+    color: var(--muted-foreground);
+  }
+
+  .removeSigBtn:hover {
+    color: var(--error);
+  }
+
+  .colorInput {
+    padding: 0;
+    cursor: pointer;
+  }
+
+  .readOnlyNote {
+    font-size: 0.875rem;
+    color: var(--muted-foreground);
+    font-style: italic;
+    padding: var(--spacing-2) 0;
+  }
+}

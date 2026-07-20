@@ -1,0 +1,40 @@
+@layer base {
+  .container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2);
+  }
+
+  .canvasWrapper {
+    position: relative;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background-color: #ffffff;
+    overflow: hidden;
+    touch-action: none; /* Prevents scroll when drawing on touch devices */
+  }
+
+  .canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    cursor: crosshair;
+  }
+
+  .placeholder {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--muted-foreground);
+    pointer-events: none;
+    user-select: none;
+    font-size: 0.875rem;
+    opacity: 0.5;
+  }
+
+  .actions {
+    display: flex;
+    justify-content: flex-end;
+  }
+}

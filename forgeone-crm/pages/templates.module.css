@@ -1,0 +1,179 @@
+@layer base {
+  .container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-8);
+  }
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .title {
+    font-family: var(--font-family-display);
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0 0 var(--spacing-1) 0;
+  }
+
+  .subtitle {
+    color: var(--muted-foreground);
+    margin: 0;
+    font-size: 1rem;
+  }
+
+  .section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-4);
+  }
+
+  .sectionTitle {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0;
+    padding-bottom: var(--spacing-2);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .sectionDescription {
+    color: var(--muted-foreground);
+    font-size: 0.875rem;
+    margin: 0;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: var(--spacing-4);
+  }
+
+  .card, .foundationCard {
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-4);
+    transition: all var(--animation-duration-fast) ease;
+  }
+
+  .card {
+    cursor: pointer;
+  }
+
+  .card:hover {
+    border-color: var(--primary);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .foundationCard {
+    background-color: color-mix(in srgb, var(--surface) 50%, var(--background));
+  }
+
+  .cardHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: var(--spacing-2);
+  }
+
+  .cardTitle {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0;
+    color: var(--foreground);
+    line-height: 1.4;
+  }
+
+  .cardFooter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+    padding-top: var(--spacing-2);
+  }
+
+  .dateText {
+    font-size: 0.75rem;
+    color: var(--muted-foreground);
+  }
+
+  .systemLabel {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-1);
+    font-size: 0.75rem;
+    color: var(--muted-foreground);
+    background-color: var(--muted);
+    padding: var(--spacing-1) var(--spacing-2);
+    border-radius: var(--radius-sm);
+  }
+
+  .emptyState {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-12) var(--spacing-4);
+    text-align: center;
+    background-color: color-mix(in srgb, var(--surface) 30%, transparent);
+    border: 1px dashed var(--border);
+    border-radius: var(--radius-md);
+    color: var(--muted-foreground);
+  }
+
+  .emptyIcon {
+    margin-bottom: var(--spacing-4);
+    opacity: 0.5;
+  }
+
+  .emptyState h3 {
+    color: var(--foreground);
+    margin: 0 0 var(--spacing-2) 0;
+    font-size: 1.125rem;
+  }
+
+  .emptyState p {
+    margin: 0;
+    font-size: 0.875rem;
+    max-width: 400px;
+  }
+
+  .form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-4);
+  }
+
+  .cardSkeleton {
+    height: 120px;
+    padding: var(--spacing-4);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .skeletonTitle {
+    width: 60%;
+    height: 1.25rem;
+  }
+
+  .skeletonBadge {
+    width: 80px;
+    height: 1.5rem;
+    border-radius: var(--radius-full);
+  }
+
+  .skeletonDate {
+    width: 100px;
+    height: 1rem;
+    align-self: flex-end;
+  }
+}

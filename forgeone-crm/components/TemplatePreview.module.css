@@ -1,0 +1,324 @@
+@layer base {
+  .previewEnvironment {
+    width: 100%;
+    height: 100%;
+    min-height: 600px;
+    background-color: var(--muted);
+    padding: var(--spacing-8) var(--spacing-4);
+    display: flex;
+    justify-content: center;
+    overflow-y: auto;
+    border-radius: var(--radius-md);
+  }
+
+  .paperSheet {
+    width: 816px; /* 8.5in at 96dpi */
+    min-height: 1056px; /* 11in at 96dpi */
+    background-color: #ffffff;
+    box-shadow: var(--shadow-lg);
+    color: #000000; /* Force dark text for print preview */
+    font-family: var(--font-family-base);
+    font-size: 11pt;
+    line-height: 1.5;
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .loadingState {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    opacity: 0.5;
+  }
+
+  .documentFlow {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .blockWrapper {
+    width: 100%;
+  }
+
+  /* Tags Styling */
+  .unresolvedTag {
+    background-color: color-mix(in srgb, #f59e0b 20%, white);
+    border: 1px solid #f59e0b;
+    color: #b45309;
+    padding: 0 4px;
+    border-radius: 4px;
+    font-family: var(--font-family-monospace);
+    font-size: 0.9em;
+  }
+
+  .missingTag {
+    color: #dc2626;
+    font-style: italic;
+    font-weight: 500;
+  }
+
+  /* Block Type Styles */
+  .headerBlock {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    border-bottom: 2px solid #000;
+    padding-bottom: 16px;
+  }
+
+  .headerText h1,
+  .headerText h2,
+  .headerText p {
+    margin: 0;
+  }
+
+  .headerText h1 {
+    font-size: 24pt;
+    font-family: var(--font-family-display);
+    margin-top: 8px;
+  }
+
+  .footerBlock {
+    margin-top: 48px;
+    border-top: 1px solid #ccc;
+    padding-top: 16px;
+    font-size: 9pt;
+    color: #666;
+  }
+
+  .pageNumber {
+    display: block;
+    margin-top: 8px;
+  }
+
+  .headingBlock {
+    margin: 0;
+    font-family: var(--font-family-display);
+    color: #111;
+  }
+
+  h1.headingBlock { font-size: 24pt; }
+  h2.headingBlock { font-size: 18pt; border-bottom: 1px solid #eee; padding-bottom: 4px; margin-top: 24px; }
+  h3.headingBlock { font-size: 14pt; margin-top: 16px; }
+
+  .textBlock {
+    white-space: pre-wrap;
+  }
+
+  .orgBrandingBlock {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .orgLogo {
+    max-width: 200px;
+    max-height: 80px;
+  }
+
+  .orgDetails {
+    text-align: right;
+    font-size: 10pt;
+  }
+
+  .recordInfoBlock {
+    background-color: #f8fafc;
+    padding: 16px;
+    border: 1px solid #e2e8f0;
+    border-radius: 4px;
+  }
+
+  .recordTitle {
+    margin: 0 0 12px 0;
+    font-size: 12pt;
+    font-family: var(--font-family-display);
+    color: #334155;
+  }
+
+  .recordTable {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 10pt;
+  }
+
+  .recordKey {
+    font-weight: 600;
+    color: #475569;
+    padding: 4px 8px 4px 0;
+    width: 35%;
+    text-transform: capitalize;
+  }
+
+  .recordVal {
+    padding: 4px 0;
+    color: #0f172a;
+  }
+
+  .dataTable {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 10pt;
+    margin-top: 16px;
+  }
+
+  .dataTable th {
+    background-color: #f1f5f9;
+    border-bottom: 2px solid #cbd5e1;
+    padding: 8px;
+    text-align: left;
+    font-weight: 600;
+    color: #334155;
+  }
+
+  .dataTable td {
+    padding: 8px;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  .emptyTable {
+    text-align: center;
+    color: #94a3b8;
+    font-style: italic;
+    padding: 24px !important;
+  }
+
+  .totalsBlock {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 16px;
+  }
+
+  .totalsTable {
+    width: 300px;
+    border-collapse: collapse;
+  }
+
+  .totalsTable td {
+    padding: 6px 8px;
+    text-align: right;
+  }
+
+  .totalsTable td:first-child {
+    font-weight: 600;
+    color: #475569;
+  }
+
+  .grandTotal {
+    font-size: 12pt;
+    font-weight: bold;
+    border-top: 2px solid #cbd5e1;
+  }
+
+  .grandTotal td:first-child {
+    color: #0f172a;
+  }
+
+  .notesBlock {
+    margin-top: 24px;
+  }
+
+  .notesBlock h3 {
+    font-size: 12pt;
+    margin: 0 0 8px 0;
+    color: #334155;
+  }
+
+  .notesContent {
+    font-size: 10pt;
+    white-space: pre-wrap;
+    color: #334155;
+  }
+
+  .signatureBlock {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 48px;
+    margin-top: 64px;
+  }
+
+  .signatureLine {
+    flex: 1;
+    min-width: 250px;
+  }
+
+  .signatureRule {
+    border-bottom: 1px solid #000;
+    margin-bottom: 8px;
+    height: 40px; /* Space for signature */
+  }
+
+  .signatureLabels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 9pt;
+    font-weight: 600;
+    color: #475569;
+  }
+
+  .imageBlock {
+    margin: 16px 0;
+  }
+
+  .placeholderImage,
+  .placeholderImageInline {
+    background-color: #f1f5f9;
+    border: 1px dashed #cbd5e1;
+    color: #94a3b8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10pt;
+  }
+
+  .placeholderImage {
+    width: 150px;
+    height: 50px;
+  }
+
+  .placeholderImageInline {
+    height: 150px;
+    margin: 0 auto;
+  }
+
+  .imageCaption {
+    font-size: 9pt;
+    color: #64748b;
+    margin-top: 8px;
+    font-style: italic;
+  }
+
+  .dividerBlock {
+    border: none;
+    margin: 24px 0;
+  }
+
+  .pageBreakBlock {
+    text-align: center;
+    margin: 40px 0;
+    position: relative;
+  }
+
+  .pageBreakBlock::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    border-top: 1px dashed #cbd5e1;
+    z-index: 1;
+  }
+
+  .pageBreakBlock span {
+    background: #ffffff;
+    padding: 0 16px;
+    color: #94a3b8;
+    font-size: 9pt;
+    font-weight: 500;
+    position: relative;
+    z-index: 2;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+}

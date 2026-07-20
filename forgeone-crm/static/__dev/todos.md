@@ -1,0 +1,5 @@
+- Email document sending from job documents
+- Copy secure review link for documents
+- Pre-job estimates from Customer or Opportunity before a Job exists
+- Opportunity-to-Job conversion preserving the original Estimate
+- Document status transition UI (mark as sent, viewed, approved, signed)

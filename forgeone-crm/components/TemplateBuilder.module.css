@@ -1,0 +1,506 @@
+@layer base {
+  .templateBuilder {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    min-height: 100vh;
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-family-base);
+  }
+
+  .loadingPage, .errorPage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100vh;
+    padding: var(--spacing-8);
+  }
+
+  .fullSkeleton {
+    width: 100%;
+    max-width: 800px;
+    height: 60vh;
+  }
+
+  /* Top Bar */
+  .topBar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--spacing-3) var(--spacing-4);
+    background-color: var(--surface);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    flex-shrink: 0;
+  }
+
+  .topBarLeft, .topBarRight {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-4);
+  }
+
+  .titleWrapper {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-3);
+  }
+
+  .titleInput {
+    font-family: var(--font-family-display);
+    font-size: 1.25rem;
+    font-weight: 600;
+    width: 280px;
+    background: transparent;
+    border-color: transparent;
+    padding-left: var(--spacing-2);
+  }
+
+  .titleInput:focus, .titleInput:hover:not(:disabled) {
+    background-color: var(--card);
+    border-color: var(--border);
+  }
+
+  .docTypeBadge {
+    text-transform: capitalize;
+  }
+
+  .switchRow {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+  }
+
+  .switchLabel {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--foreground);
+    cursor: pointer;
+  }
+
+  .divider {
+    width: 1px;
+    height: 24px;
+    background-color: var(--border);
+  }
+
+  .dirtyDot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--warning);
+    display: inline-block;
+    margin-right: -8px;
+  }
+
+  /* Main Area */
+  .mainArea {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  /* Edit Mode */
+  .editMode {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  .leftPanel {
+    width: 340px;
+    background-color: var(--surface);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+  }
+
+  .leftPanelHeader {
+    padding: var(--spacing-3) var(--spacing-4);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: color-mix(in srgb, var(--surface) 80%, black);
+  }
+
+  .panelTitle {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  .blockList {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--spacing-3);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2);
+  }
+
+  .emptyBlocks {
+    padding: var(--spacing-8);
+    text-align: center;
+    color: var(--muted-foreground);
+    font-size: 0.875rem;
+  }
+
+  .blockCard {
+    display: flex;
+    align-items: center;
+    padding: var(--spacing-2) var(--spacing-3);
+    background-color: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: all var(--animation-duration-fast) ease;
+    min-height: 48px;
+  }
+
+  .blockCard[data-selected="true"] {
+    border-color: var(--primary);
+    background-color: color-mix(in srgb, var(--primary) 10%, var(--card));
+    box-shadow: 0 0 0 1px var(--primary);
+  }
+
+  .blockCardIcon {
+    margin-right: var(--spacing-3);
+    color: var(--muted-foreground);
+    flex-shrink: 0;
+  }
+
+  .blockCard[data-selected="true"] .blockCardIcon {
+    color: var(--primary);
+  }
+
+  .blockCardLabel {
+    flex: 1;
+    font-size: 0.875rem;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .blockCardActions {
+    display: flex;
+    align-items: center;
+    opacity: 0;
+    transition: opacity var(--animation-duration-fast) ease;
+  }
+
+  .blockCard:hover .blockCardActions,
+  .blockCard[data-selected="true"] .blockCardActions {
+    opacity: 1;
+  }
+
+  .centerPanel {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--spacing-8);
+    background-color: var(--background);
+    display: flex;
+    justify-content: center;
+  }
+
+  .centerPanel > div {
+    max-width: 800px;
+    width: 100%;
+  }
+
+  .emptyCenter {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: var(--muted-foreground);
+    text-align: center;
+  }
+
+  .emptyIcon {
+    color: var(--border);
+    margin-bottom: var(--spacing-4);
+  }
+
+  .emptyCenter h3 {
+    margin: 0 0 var(--spacing-2) 0;
+    color: var(--foreground);
+    font-family: var(--font-family-display);
+  }
+
+  /* Preview Mode */
+  .previewMode {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow: hidden;
+    background-color: var(--background);
+  }
+
+  .previewControls {
+    padding: var(--spacing-3) var(--spacing-4);
+    background-color: var(--surface);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .previewDataSelectors {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-6);
+  }
+
+  .dataSelect {
+    width: 220px;
+  }
+
+  .warningsBar {
+    background-color: color-mix(in srgb, var(--warning) 15%, var(--surface));
+    border-bottom: 1px solid color-mix(in srgb, var(--warning) 30%, var(--surface));
+    padding: var(--spacing-3) var(--spacing-6);
+    color: var(--warning);
+    font-size: 0.875rem;
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-3);
+  }
+
+  .warningIcon {
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .warningsList {
+    margin: 0;
+    padding: 0 0 0 var(--spacing-4);
+  }
+
+  .previewScrollArea {
+    flex: 1;
+    overflow-y: auto;
+  }
+
+  /* Add Block Dialog */
+  .addBlockDialog {
+    max-width: 800px;
+    width: 90vw;
+  }
+
+  .blockListGrid {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-6);
+    max-height: 60vh;
+    overflow-y: auto;
+    padding-right: var(--spacing-2);
+  }
+
+  .blockCategoryTitle {
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: capitalize;
+    margin: 0 0 var(--spacing-3) 0;
+    color: var(--muted-foreground);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: var(--spacing-2);
+  }
+
+  .blockCards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: var(--spacing-3);
+  }
+
+  .addBlockCard {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-2);
+    padding: var(--spacing-3);
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    cursor: pointer;
+    text-align: left;
+    transition: all var(--animation-duration-fast) ease;
+  }
+
+  .addBlockCard:hover {
+    border-color: var(--primary);
+    background-color: color-mix(in srgb, var(--primary) 5%, var(--surface));
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .addBlockCardIcon {
+    color: var(--primary);
+    margin-bottom: var(--spacing-1);
+  }
+
+  .addBlockCardLabel {
+    font-weight: 600;
+    font-size: 0.9375rem;
+    color: var(--foreground);
+  }
+
+  .addBlockCardDesc {
+    font-size: 0.75rem;
+    color: var(--muted-foreground);
+    line-height: 1.4;
+  }
+
+  /* Version History Sheet */
+  .versionSheet {
+    width: 400px !important;
+  }
+
+  .versionSheetContent {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-6);
+    padding: var(--spacing-4);
+  }
+
+  .versionBoxTitle {
+    margin: 0 0 var(--spacing-3) 0;
+    font-size: 1rem;
+    color: var(--foreground);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: var(--spacing-2);
+  }
+
+  .newVersionBox {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-3);
+    background-color: var(--surface);
+    padding: var(--spacing-4);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+  }
+
+  .textarea {
+    width: 100%;
+    padding: var(--spacing-2) var(--spacing-3);
+    background-color: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--foreground);
+    font-family: var(--font-family-base);
+    font-size: 0.875rem;
+    resize: vertical;
+    min-height: 80px;
+    outline: none;
+  }
+
+  .textarea:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 15%, transparent);
+  }
+
+  .dirtyVersionWarning {
+    font-size: 0.875rem;
+    color: var(--warning);
+    background-color: color-mix(in srgb, var(--warning) 10%, transparent);
+    padding: var(--spacing-3);
+    border-radius: var(--radius-sm);
+    border: 1px solid color-mix(in srgb, var(--warning) 20%, transparent);
+  }
+
+  .versionList {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-3);
+  }
+
+  .emptyVersions {
+    color: var(--muted-foreground);
+    font-size: 0.875rem;
+    text-align: center;
+    padding: var(--spacing-4);
+  }
+
+  .versionItem {
+    padding: var(--spacing-4);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background-color: var(--muted);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2);
+  }
+
+  .versionHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 1rem;
+    color: var(--foreground);
+  }
+
+  .versionMeta {
+    font-size: 0.75rem;
+    color: var(--muted-foreground);
+  }
+
+  .versionNotes {
+    font-size: 0.875rem;
+    color: var(--foreground);
+    background-color: color-mix(in srgb, var(--surface) 50%, transparent);
+    padding: var(--spacing-2);
+    border-radius: var(--radius-sm);
+    margin-top: var(--spacing-1);
+  }
+
+  .restoreBtn {
+    margin-top: var(--spacing-2);
+    align-self: flex-start;
+  }
+
+  /* PDF Dialog */
+  .pdfDialogContent {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-6);
+    padding: var(--spacing-4) 0;
+  }
+
+  .infoBanner {
+    background-color: color-mix(in srgb, var(--info) 10%, transparent);
+    color: var(--info);
+    padding: var(--spacing-3);
+    border-radius: var(--radius-sm);
+    font-size: 0.875rem;
+    border: 1px solid color-mix(in srgb, var(--info) 30%, transparent);
+  }
+
+  .realDataSelects {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-4);
+    padding-left: var(--spacing-6);
+    border-left: 2px solid var(--border);
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2);
+  }
+
+  .field label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--foreground);
+  }
+}

@@ -1,0 +1,134 @@
+@layer base {
+  .card {
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+
+  .cardHeader {
+    padding: var(--spacing-4) var(--spacing-6);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .cardTitle {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin: 0;
+    color: var(--surface-foreground);
+  }
+
+  .list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .emptyState {
+    padding: var(--spacing-12) var(--spacing-6);
+    text-align: center;
+    color: var(--muted-foreground);
+  }
+
+  .emptyState p {
+    margin: 0;
+    font-size: 0.9375rem;
+  }
+
+  .documentItem {
+    padding: var(--spacing-4) var(--spacing-6);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color var(--animation-duration-fast) ease;
+  }
+
+  .documentItem:last-child {
+    border-bottom: none;
+  }
+
+  .documentItem:hover {
+    background-color: color-mix(in srgb, var(--primary) 5%, transparent);
+  }
+
+  .docLeft {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-4);
+    cursor: pointer;
+    flex: 1;
+  }
+
+  .iconContainer {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: var(--radius);
+    background-color: var(--muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted-foreground);
+    flex-shrink: 0;
+  }
+
+  .docInfo {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-1);
+  }
+
+  .docInfoTop {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-3);
+  }
+
+  .docNumber {
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--surface-foreground);
+  }
+
+  .docType {
+    font-size: 0.875rem;
+    color: var(--muted-foreground);
+  }
+
+  .docInfoBottom {
+    font-size: 0.75rem;
+    color: var(--muted-foreground);
+  }
+
+  .docActions {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+  }
+
+  .actionText {
+    margin-left: var(--spacing-1);
+  }
+
+  @media (max-width: 640px) {
+    .actionText {
+      display: none;
+    }
+  }
+
+  .destructiveIconBtn {
+    color: var(--error);
+  }
+
+  .destructiveIconBtn:hover {
+    background-color: color-mix(in srgb, var(--error) 15%, var(--surface));
+    color: var(--error);
+  }
+
+  .skeletonLine {
+    height: 1.5rem;
+    border-radius: var(--radius);
+  }
+}

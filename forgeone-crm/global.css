@@ -1,0 +1,109 @@
+@import url(https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap);
+@import url(https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap);
+@import url(https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap);
+
+
+
+:root {
+  /* Overlay layers */
+  --z-overlay: 400;
+
+  --z-spotlight: 1000; /* Tutorial spotlights/guided help */
+
+  /* System layers */
+  --z-critical: 2000; /* Critical system notifications */
+
+  /* spacing */
+  --spacing-1: 0.25rem;
+  --spacing-2: 0.5rem;
+  --spacing-3: 0.75rem;
+  --spacing-4: 1rem;
+  --spacing-6: 1.5rem;
+  --spacing-8: 2rem;
+  --spacing-12: 3rem;
+  --spacing-16: 4rem;
+  --spacing-20: 5rem;
+}
+
+:root {
+  /* Backgrounds & Surfaces */
+  --background: #09090b;
+  --foreground: #f8fafc;
+  
+  --surface: #0f172a;
+  --surface-foreground: #f8fafc;
+  
+  --sidebar: #040405;
+  --sidebar-foreground: #f8fafc;
+  
+  --card: #0f172a;
+  --card-foreground: #f8fafc;
+  
+  --popup: #1e293b;
+  --popup-foreground: #f8fafc;
+
+  /* Brand Colors */
+  --primary: #3B82F6;
+  --primary-foreground: #ffffff;
+  
+  --secondary: #60A5FA;
+  --secondary-foreground: #09090b;
+  
+  --accent: #64748B;
+  --accent-foreground: #ffffff;
+
+  /* UI States */
+  --muted: #1e293b;
+  --muted-foreground: #94a3b8;
+  
+  --success: #10b981;
+  --success-foreground: #09090b;
+  
+  --error: #ef4444;
+  --error-foreground: #ffffff;
+  
+  --warning: #f59e0b;
+  --warning-foreground: #09090b;
+  
+  --info: #3B82F6;
+  --info-foreground: #ffffff;
+  --info-hover: #2563EB;
+  --info-active: #1D4ED8;
+
+  /* Borders & Lines */
+  --border: #1e293b;
+
+  /* Typography */
+  --font-family-base: "IBM Plex Sans", system-ui, sans-serif;
+  --font-family-display: "Newsreader", Georgia, serif;
+  --font-family-monospace: "IBM Plex Mono", monospace;
+  --font-family-cursive: cursive;
+
+  /* Radii - Kept tight and structured for the architectural thread */
+  --radius-sm: 0.125rem;
+  --radius: 0.25rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.5rem;
+  --radius-full: 9999px;
+
+  /* Shadows - Tight, realistic depth */
+  --shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.6), 0 4px 6px -4px rgba(0, 0, 0, 0.4);
+  --shadow-focus: 0 0 0 2px #09090b, 0 0 0 4px #3B82F6;
+
+  /* Animations */
+  --animation-duration-fast: 150ms;
+  --animation-duration-normal: 250ms;
+  --animation-duration-slow: 350ms;
+
+  /* Chart Colors - Professional, distinct, slightly desaturated */
+  --chart-color-1: #3B82F6;
+  --chart-color-2: #60A5FA;
+  --chart-color-3: #64748B;
+  --chart-color-4: #94a3b8;
+  --chart-color-5: #cbd5e1;
+}
+
+.dark {
+}

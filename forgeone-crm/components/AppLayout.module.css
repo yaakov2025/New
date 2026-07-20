@@ -1,0 +1,277 @@
+@layer base {
+  .layout {
+    display: flex;
+    height: 100vh;
+    background-color: var(--background);
+    color: var(--foreground);
+    overflow: hidden;
+  }
+
+  .sidebar {
+    width: 260px;
+    background-color: var(--sidebar);
+    color: var(--sidebar-foreground);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    z-index: 50;
+    transition: transform 0.2s ease;
+  }
+
+  .sidebarHeader {
+    height: 64px;
+    display: flex;
+    align-items: center;
+    padding: 0 var(--spacing-4);
+    border-bottom: 1px solid var(--border);
+    justify-content: space-between;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+  }
+
+  .brandLogo {
+    width: 160px;
+    height: auto;
+    display: block;
+  }
+
+  .brandSymbol {
+    width: 24px;
+    height: auto;
+    display: none;
+  }
+
+  .mobileClose {
+    display: none;
+  }
+
+  .nav {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--spacing-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-1);
+  }
+
+  .navLink {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-3);
+    padding: var(--spacing-2) var(--spacing-3);
+    border-radius: var(--radius-md);
+    color: var(--muted-foreground);
+    text-decoration: none;
+    font-weight: 500;
+    transition: all var(--animation-duration-fast);
+  }
+
+  .navLink:hover {
+    color: var(--sidebar-foreground);
+    background-color: color-mix(in srgb, var(--primary) 20%, transparent);
+  }
+
+  .navLinkActive {
+    color: var(--primary-foreground);
+    background-color: var(--primary);
+  }
+
+  .main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  .topbar {
+    height: 64px;
+    background-color: var(--surface);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 var(--spacing-6);
+  }
+
+  .topbarLeft {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-4);
+  }
+
+  .mobileMenuToggle {
+    display: none;
+  }
+
+  .orgSwitcher {
+    width: 220px;
+    background-color: transparent;
+    border-color: transparent;
+    font-weight: 600;
+  }
+  
+  .orgSwitcher:hover {
+    background-color: var(--muted);
+  }
+
+  .topbarRight {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-4);
+  }
+
+  .searchTrigger {
+    width: 200px;
+    justify-content: flex-start;
+    color: var(--muted-foreground);
+  }
+
+  .searchPlaceholder {
+    margin-left: var(--spacing-2);
+  }
+
+  .searchPopover {
+    width: 320px;
+    padding: var(--spacing-3);
+  }
+
+  .searchResults {
+    margin-top: var(--spacing-3);
+    max-height: 300px;
+    overflow-y: auto;
+  }
+
+  .searchState {
+    font-size: 0.875rem;
+    color: var(--muted-foreground);
+    text-align: center;
+    padding: var(--spacing-4) 0;
+  }
+
+  .searchGroup {
+    margin-bottom: var(--spacing-3);
+  }
+
+  .searchGroupTitle {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--muted-foreground);
+    margin-bottom: var(--spacing-1);
+    padding: 0 var(--spacing-2);
+  }
+
+  .searchItem {
+    padding: var(--spacing-2);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+  }
+
+  .searchItem:hover {
+    background-color: var(--muted);
+  }
+
+  .searchItemTitle {
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin: 0;
+  }
+
+  .searchItemSubtitle {
+    font-size: 0.75rem;
+    color: var(--muted-foreground);
+    margin: 0;
+  }
+
+  .userMenuTrigger {
+    padding: 0;
+    border-radius: var(--radius-full);
+  }
+
+  .userInfo {
+    padding: var(--spacing-2) var(--spacing-3);
+  }
+
+  .userName {
+    font-weight: 600;
+    font-size: 0.875rem;
+    margin: 0;
+  }
+
+  .userEmail {
+    font-size: 0.75rem;
+    color: var(--muted-foreground);
+    margin: 0;
+  }
+
+  .userRole {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    color: var(--primary);
+    margin: var(--spacing-1) 0 0 0;
+    font-weight: 700;
+  }
+
+  .content {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--spacing-8) var(--spacing-6);
+    background-color: var(--background);
+  }
+
+  @media (max-width: 768px) {
+    .sidebar {
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      transform: translateX(-100%);
+    }
+
+    .sidebarOpen {
+      transform: translateX(0);
+    }
+
+    .mobileClose {
+      display: inline-flex;
+    }
+
+    .mobileMenuToggle {
+      display: inline-flex;
+    }
+
+    .brandLogo {
+      /* Show symbol or scale logo depending on design, but instructions 
+         suggested symbol for mobile/collapsed. Sidebar is fully shown on mobile 
+         when open, so full logo is fine, but we'll include symbol for compact cases if needed */
+    }
+
+    .mobileOverlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 40;
+    }
+
+    .searchTrigger {
+      width: 40px;
+      padding: 0;
+      justify-content: center;
+    }
+    
+    .searchPlaceholder {
+      display: none;
+    }
+
+    .topbar {
+      padding: 0 var(--spacing-4);
+    }
+
+    .content {
+      padding: var(--spacing-4);
+    }
+  }
+}

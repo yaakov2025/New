@@ -1,0 +1,143 @@
+@layer base {
+  .container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-6);
+  }
+
+  .backLink {
+    font-size: 0.875rem;
+    color: var(--muted-foreground);
+    text-decoration: none;
+    margin-bottom: var(--spacing-2);
+    display: inline-block;
+  }
+  
+  .backLink:hover {
+    color: var(--primary);
+  }
+
+  .titleSection {
+    margin-bottom: var(--spacing-4);
+  }
+
+  .title {
+    font-family: var(--font-family-display);
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0 0 var(--spacing-2) 0;
+  }
+
+  .meta {
+    display: flex;
+    gap: var(--spacing-4);
+  }
+
+  .metaItem {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    font-size: 0.875rem;
+    color: var(--muted-foreground);
+  }
+
+  .tabsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-6);
+  }
+
+  .tabContent {
+    outline: none;
+  }
+
+  .card {
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+  }
+
+  .cardHeader {
+    padding: var(--spacing-4) var(--spacing-6);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .cardTitle {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: var(--spacing-4);
+    padding: var(--spacing-6);
+  }
+
+  .gridItem {
+    display: flex;
+    gap: var(--spacing-4);
+    padding: var(--spacing-4);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background-color: var(--background);
+  }
+
+  .gridItemIcon {
+    color: var(--muted-foreground);
+    padding-top: var(--spacing-1);
+  }
+
+  .gridItemDetails {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-1);
+  }
+
+  .gridItemTitle {
+    font-weight: 600;
+    margin: 0;
+  }
+
+  .gridItemSub {
+    font-size: 0.875rem;
+    color: var(--primary);
+    margin: 0;
+  }
+
+  .gridItemMeta {
+    font-size: 0.875rem;
+    color: var(--muted-foreground);
+    margin: 0;
+  }
+
+  .form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-4);
+  }
+
+  .emptyText {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: var(--muted-foreground);
+    padding: var(--spacing-4) 0;
+    font-size: 0.875rem;
+  }
+
+  .jobLink {
+    font-size: 0.75rem;
+    color: var(--primary);
+    text-decoration: none;
+    margin-top: var(--spacing-2);
+    display: inline-block;
+  }
+
+  .jobLink:hover {
+    text-decoration: underline;
+  }
+}

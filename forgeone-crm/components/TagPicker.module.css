@@ -1,0 +1,132 @@
+@layer base {
+  .popoverContent {
+    width: 320px;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    max-height: 400px;
+    overflow: hidden;
+  }
+
+  .header {
+    padding: var(--spacing-3);
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+    background-color: var(--popup);
+  }
+
+  .searchWrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .searchIcon {
+    position: absolute;
+    left: var(--spacing-3);
+    width: 16px;
+    height: 16px;
+    color: var(--muted-foreground);
+    pointer-events: none;
+  }
+
+  .searchInput {
+    padding-left: calc(var(--spacing-3) * 2 + 16px);
+    height: 2rem;
+  }
+
+  .contentArea {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--spacing-2);
+  }
+
+  .emptyState {
+    padding: var(--spacing-6);
+    text-align: center;
+    color: var(--muted-foreground);
+    font-size: 0.875rem;
+  }
+
+  .accordion {
+    width: 100%;
+  }
+
+  .accordionItem {
+    margin-bottom: 0;
+    border-radius: 0;
+    box-shadow: none;
+    background: transparent;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .accordionItem:last-child {
+    border-bottom: none;
+  }
+
+  .accordionItem:hover:not(:has(.accordionTrigger:disabled)) {
+    box-shadow: none;
+  }
+
+  .accordionTrigger {
+    padding: var(--spacing-2) var(--spacing-3);
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+
+  .accordionContent {
+    padding-bottom: 0;
+  }
+
+  .tagList {
+    display: flex;
+    flex-direction: column;
+    padding: var(--spacing-1) 0 var(--spacing-3);
+  }
+
+  .tagItem {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    padding: var(--spacing-2) var(--spacing-3);
+    border: none;
+    background: transparent;
+    color: var(--foreground);
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+    transition: background-color var(--animation-duration-fast) ease;
+    text-align: left;
+  }
+
+  .tagItem:hover,
+  .tagItem:focus-visible {
+    background-color: var(--muted);
+    outline: none;
+  }
+
+  .tagItemHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: var(--spacing-1);
+  }
+
+  .tagLabel {
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+
+  .tagBadge {
+    font-size: 0.65rem;
+    padding: 0 var(--spacing-2);
+    height: 1.25rem;
+  }
+
+  .tagKey {
+    font-size: 0.75rem;
+    color: var(--muted-foreground);
+    font-family: var(--font-family-monospace);
+  }
+}

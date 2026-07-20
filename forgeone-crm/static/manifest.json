@@ -1,0 +1,22 @@
+{
+  "name": "ForgeOne CRM",
+  "short_name": "ForgeOne",
+  "description": "Construction CRM for managing customers, leads, opportunities, and jobs",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#09090b",
+  "theme_color": "#3B82F6",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "/_cdn/static/forgeone-symbol.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "/_cdn/static/forgeone-symbol.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg"
+    }
+  ]
+}
