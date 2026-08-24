@@ -1,0 +1,169 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Fraunces", ui-serif, Georgia, "Times New Roman", serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+  --color-bg: #efece4;
+  --color-surface: #f7f5ef;
+  --color-surface-2: #e7e1d6;
+  --color-ink: #1c1915;
+  --color-fg: #1c1915;
+  --color-muted: #6b6560;
+  --color-subtle: #8a837a;
+  --color-primary: #2f5d56;
+  --color-primary-fg: #f4f1ea;
+  --color-border: #d4ccc0;
+  --color-diagram: #e4eaee;
+  --color-intake: #2d5f7a;
+  --color-intake-soft: #d5e4ec;
+  --color-exhaust: #8c4a32;
+  --color-exhaust-soft: #f0ddd4;
+  --color-heat: #c4783c;
+  --color-ok: #2c6a4a;
+  --color-ok-soft: #d7ece0;
+  --color-warn: #8a6420;
+  --color-warn-soft: #f3e6c8;
+  --color-danger: #9b3a32;
+  --color-danger-soft: #f3d6d2;
+  --color-ring: #2f5d56;
+
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  --radius-2xl: 1.75rem;
+
+  --shadow-card: 0 0 0 1px rgb(28 25 21 / 0.06), 0 1px 2px rgb(28 25 21 / 0.05),
+    0 8px 24px rgb(28 25 21 / 0.04);
+  --shadow-card-lg: 0 0 0 1px rgb(28 25 21 / 0.06), 0 2px 4px rgb(28 25 21 / 0.04),
+    0 20px 44px -12px rgb(28 25 21 / 0.14);
+  --shadow-glow-primary: 0 0 0 1px rgb(47 93 86 / 0.35), 0 10px 30px -8px rgb(47 93 86 / 0.45);
+}
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    scroll-behavior: smooth;
+  }
+
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+
+  html,
+  body {
+    color: var(--color-fg);
+    overflow-x: clip;
+  }
+
+  body {
+    background:
+      radial-gradient(1100px 560px at 8% -12%, rgb(47 93 86 / 0.12), transparent 60%),
+      radial-gradient(900px 520px at 108% 0%, rgb(196 120 60 / 0.10), transparent 55%),
+      var(--color-bg);
+    background-attachment: fixed;
+  }
+
+  select {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background: var(--color-primary);
+    color: var(--color-primary-fg);
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgb(28 25 21 / 0.18);
+    border-radius: 999px;
+    border: 2px solid var(--color-bg);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgb(28 25 21 / 0.3);
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-up {
+  animation: fade-up 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-up,
+  .air-particle,
+  .flow-dash,
+  .flow-stream {
+    animation: none !important;
+  }
+}
+
+@keyframes flow-dash {
+  to {
+    stroke-dashoffset: -36;
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.flow-stream {
+  stroke-dasharray: 7 15;
+  stroke-linecap: round;
+  animation: flow-dash 1.6s linear infinite;
+}
+
+.air-particle {
+  offset-rotate: 0deg;
+}
+
+@media print {
+  body {
+    background: white;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .print-break {
+    break-inside: avoid;
+  }
+}
