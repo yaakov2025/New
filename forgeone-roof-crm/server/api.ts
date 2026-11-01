@@ -40,7 +40,8 @@ api.get('/config', (_req, res) => {
  */
 api.post('/setup', (req, res) => {
   const ip = req.socket.remoteAddress ?? '';
-  const local = ['127.0.0.1', '::1', '::ffff:127.0.0.1'].includes(ip);
+  // GitHub Codespaces forwards a private port that only the codespace owner can open.
+  const local = ['127.0.0.1', '::1', '::ffff:127.0.0.1'].includes(ip) || process.env.CODESPACES === 'true';
   if (config.serverKey || config.browserKey) return void res.status(409).json({ error: 'A key is already configured.' });
   if (!local) return void res.status(403).json({ error: 'Setup is only allowed from localhost.' });
   const key = String(req.body?.key ?? '').trim();

@@ -1,0 +1,10 @@
+{
+  "name": "ForgeOne Roof Measure",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:22",
+  "postCreateCommand": "cd forgeone-roof-crm && npm install",
+  "postAttachCommand": { "app": "cd forgeone-roof-crm && npm run dev" },
+  "forwardPorts": [3000],
+  "portsAttributes": {
+    "3000": { "label": "ForgeOne Roof Measure", "onAutoForward": "openBrowser" }
+  }
+}

@@ -8,6 +8,15 @@ labelled with where it came from.
 This is a standalone prototype. It does not connect to the live ForgeOne CRM or
 any production database. Data is kept in `data/store.json`.
 
+## Preview it in your browser (no install)
+
+1. On GitHub, open the repo and switch to this branch.
+2. Click **Code → Codespaces → Create codespace on this branch**.
+3. Wait about 2 minutes. The app starts on its own and opens in a new tab. If it doesn't, open the **Ports** tab and click the globe next to port 3000.
+4. Paste your Google API key on the first screen.
+
+If your browser key has HTTP-referrer restrictions, add `https://*.app.github.dev/*` to them, or the map won't load.
+
 ## Run it
 
 ```bash
