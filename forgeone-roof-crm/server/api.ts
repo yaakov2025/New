@@ -106,7 +106,7 @@ api.post('/property/measure', async (req: Request, res: Response) => {
     }
 
     // Reuse an existing record for the same Place ID (saves Google usage).
-    const existing = store.findByPlaceId(geo.result.placeId);
+    const existing = store.findByPlaceId(geo.result.placeId) ?? store.findByAddress(geo.result.formattedAddress);
     if (existing && existing.solar && !req.body?.forceRefresh) {
       diagnostics.push({ at: nowIso(), service: 'CACHE', ok: true, message: 'Property already in pipeline with Solar data cached (<30 days) – Solar API not called again.' });
       existing.coordinates = coords(geo.result.location);

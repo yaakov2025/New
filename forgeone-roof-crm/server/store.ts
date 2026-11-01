@@ -77,6 +77,12 @@ class Store {
     return this.data.properties.find((p) => p.placeId === placeId) ?? null;
   }
 
+  /** Same building looked up two ways (autocomplete vs typed) can get different Place IDs. */
+  findByAddress(formatted: string) {
+    const k = formatted.trim().toLowerCase();
+    return this.data.properties.find((p) => p.formattedAddress.trim().toLowerCase() === k) ?? null;
+  }
+
   upsert(p: PropertyRecord) {
     const i = this.data.properties.findIndex((x) => x.id === p.id);
     if (i >= 0) this.data.properties[i] = p;
