@@ -12,9 +12,12 @@ any production database. Data is kept in `data/store.json`.
 
 ```bash
 npm install
-cp .env.example .env      # then put your keys in .env
-npm run dev               # http://localhost:3000
+npm run dev               # open http://localhost:3000
 ```
+
+On first launch the app asks for your Google Maps API key. Paste it once and it is
+saved to the local `.env` file, which git ignores. To change the key later, edit `.env`.
+Advanced: split it into `GOOGLE_MAPS_SERVER_KEY` and `GOOGLE_MAPS_BROWSER_KEY`, as shown in `.env.example`.
 
 Production build: `npm run build && npm start`. Tests: `npm test`. Types: `npm run typecheck`.
 

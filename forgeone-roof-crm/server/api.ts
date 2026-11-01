@@ -1,5 +1,7 @@
 import express, { type Request, type Response } from 'express';
 import crypto from 'node:crypto';
+import fs from 'node:fs';
+import path from 'node:path';
 import { config, redact } from './config.ts';
 import { store } from './store.ts';
 import { geocode, solarBuildingInsights, validateAddress } from './google.ts';
@@ -29,6 +31,27 @@ api.get('/config', (_req, res) => {
     sharedKeyWarning: config.sharedKey,
     expectedProjectNumber: config.expectedProjectNumber,
   });
+});
+
+/**
+ * First-run setup: paste one Google key in the browser, it is written to the
+ * local .env (git-ignored) and used immediately. Only allowed while no key is
+ * configured and only from this machine (localhost).
+ */
+api.post('/setup', (req, res) => {
+  const ip = req.socket.remoteAddress ?? '';
+  const local = ['127.0.0.1', '::1', '::ffff:127.0.0.1'].includes(ip);
+  if (config.serverKey || config.browserKey) return void res.status(409).json({ error: 'A key is already configured.' });
+  if (!local) return void res.status(403).json({ error: 'Setup is only allowed from localhost.' });
+  const key = String(req.body?.key ?? '').trim();
+  if (!/^AIza[0-9A-Za-z_-]{30,}$/.test(key)) return void res.status(400).json({ error: 'That does not look like a Google API key (starts with AIza).' });
+  const envPath = path.resolve('.env');
+  const existing = fs.existsSync(envPath) ? fs.readFileSync(envPath, 'utf8') : '';
+  fs.writeFileSync(envPath, `${existing.replace(/^GOOGLE_MAPS_API_KEY=.*$/m, '').trim()}\nGOOGLE_MAPS_API_KEY=${key}\n`.trimStart());
+  config.serverKey = key;
+  config.browserKey = key;
+  config.sharedKey = true;
+  res.json({ ok: true });
 });
 
 api.get('/usage', (_req, res) => res.json(store.usage()));

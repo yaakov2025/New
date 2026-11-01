@@ -13,7 +13,10 @@ function int(name: string, def: number): number {
  * Maps JS SDK requires a key in the page). Restrict it to HTTP referrers and to
  * Maps JavaScript API + Places API (New).
  */
-export const config = {
+export const config: {
+  port: number; serverKey: string; browserKey: string; sharedKey: boolean; mapId: string; expectedProjectNumber: string;
+  useAddressValidation: boolean; dataFile: string; dailyLimits: { solar: number; geocode: number; addressValidation: number };
+} = {
   port: int('PORT', 3000),
   serverKey: process.env.GOOGLE_MAPS_SERVER_KEY || process.env.GOOGLE_MAPS_API_KEY || '',
   browserKey: process.env.GOOGLE_MAPS_BROWSER_KEY || process.env.GOOGLE_MAPS_API_KEY || '',

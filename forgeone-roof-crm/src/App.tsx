@@ -182,7 +182,7 @@ export default function App() {
 
   if (configError) return <Fatal msg={`Cannot reach the server: ${configError}`} />;
   if (!config) return <div className="h-full grid place-items-center"><Loader2 className="animate-spin text-cyan-400" /></div>;
-  if (!config.browserKey) return <Fatal msg="No browser API key configured. Set GOOGLE_MAPS_BROWSER_KEY (or GOOGLE_MAPS_API_KEY) in .env and restart the server." />;
+  if (!config.browserKey) return <KeySetup />;
 
   return (
     <APIProvider apiKey={config.browserKey} libraries={['places', 'marker', 'geometry']}>
@@ -223,6 +223,41 @@ export default function App() {
         {showDiag && <DiagnosticsModal property={property} takeoff={draft} config={config} onClose={() => setShowDiag(false)} />}
       </div>
     </APIProvider>
+  );
+}
+
+function KeySetup() {
+  const [key, setKey] = useState('');
+  const [err, setErr] = useState<string | null>(null);
+  const save = async () => {
+    setErr(null);
+    const r = await fetch('/api/setup', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ key }) });
+    const j = await r.json().catch(() => ({}));
+    if (r.ok) location.reload();
+    else setErr(j.error || `HTTP ${r.status}`);
+  };
+  return (
+    <div className="h-full grid place-items-center p-6">
+      <form
+        className="w-full max-w-md space-y-3 rounded-xl border border-slate-700 bg-slate-900 p-6"
+        onSubmit={(e) => {
+          e.preventDefault();
+          void save();
+        }}
+      >
+        <h1 className="font-bold">Paste your Google Maps API key</h1>
+        <p className="text-xs text-slate-400">Saved to the local <code>.env</code> file on this computer (never committed to git). You only do this once.</p>
+        <input
+          value={key}
+          onChange={(e) => setKey(e.target.value)}
+          placeholder="AIza…"
+          aria-label="Google Maps API key"
+          className="w-full bg-slate-800 border border-slate-700 rounded px-3 py-2 text-sm font-mono"
+        />
+        {err && <p className="text-xs text-red-300">{err}</p>}
+        <button className="w-full py-2 rounded bg-cyan-600 hover:bg-cyan-500 text-sm font-semibold">Save and start</button>
+      </form>
+    </div>
   );
 }
 
