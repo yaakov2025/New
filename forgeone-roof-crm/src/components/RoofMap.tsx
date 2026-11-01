@@ -34,6 +34,7 @@ import {
   type Selection,
   type Tool,
   type Visibility,
+  type LayerKey,
 } from '../editor.ts';
 
 interface Props {
@@ -46,6 +47,7 @@ interface Props {
   tool: Tool;
   setTool: (t: Tool) => void;
   visibility: Visibility;
+  toggleLayer: (k: LayerKey) => void;
   canUndo: boolean;
   canRedo: boolean;
   onUndo: () => void;
@@ -65,7 +67,8 @@ export function RoofMap(props: Props) {
   const { property, takeoff, tool, setTool } = props;
   const [draft, setDraft] = useState<LatLng[]>([]);
   const [cursor, setCursor] = useState<LatLng | null>(null);
-  const [mapType, setMapType] = useState<'satellite' | 'hybrid'>('satellite');
+  const [mapType, setMapType] = useState<'satellite' | 'hybrid' | 'roadmap'>('satellite');
+  const [legendOpen, setLegendOpen] = useState(true);
   const center = propertyCenter(property, takeoff);
 
   // Reset draft whenever the tool or property changes.
@@ -249,11 +252,40 @@ export function RoofMap(props: Props) {
         )}
 
         <div className="pointer-events-auto ml-auto flex items-center gap-1 rounded-lg bg-slate-900/95 border border-slate-700 p-1 shadow-xl">
-          <button onClick={() => setMapType(mapType === 'satellite' ? 'hybrid' : 'satellite')} className="px-2 py-1 rounded text-xs font-semibold text-slate-300 hover:bg-slate-800">
-            {mapType === 'satellite' ? 'Show labels' : 'Hide labels'}
-          </button>
+          {(['satellite', 'hybrid', 'roadmap'] as const).map((m) => (
+            <button
+              key={m}
+              onClick={() => setMapType(m)}
+              aria-pressed={mapType === m}
+              className={`px-2 py-1 rounded text-xs font-semibold ${mapType === m ? 'bg-slate-700 text-white' : 'text-slate-300 hover:bg-slate-800'}`}
+            >
+              {{ satellite: 'Satellite', hybrid: 'Satellite + labels', roadmap: 'Road map' }[m]}
+            </button>
+          ))}
           <RecenterButton center={center} />
         </div>
+      </div>
+
+      {/* Legend – click an entry to show / hide that layer */}
+      <div className="absolute bottom-24 left-3 rounded-lg bg-slate-900/95 border border-slate-700 shadow-xl text-[11px]" data-testid="legend">
+        <button onClick={() => setLegendOpen(!legendOpen)} className="w-full text-left px-3 py-1.5 font-bold text-slate-300">
+          Legend {legendOpen ? '▾' : '▸'}
+        </button>
+        {legendOpen && (
+          <ul className="px-2 pb-2 space-y-0.5">
+            {EDGE_TYPES.map((t) => (
+              <LegendItem key={t} on={props.visibility[t]} onClick={() => props.toggleLayer(t)} swatch={<span className="inline-block w-4 h-1 rounded" style={{ background: EDGE_STYLE[t].color }} />} label={`${EDGE_STYLE[t].label}${countOf(takeoff, t)}`} />
+            ))}
+            <LegendItem on={props.visibility.FACETS} onClick={() => props.toggleLayer('FACETS')} swatch={<span className="inline-block w-4 h-3 rounded-sm border" style={{ background: FACET_COLOR + '55', borderColor: FACET_COLOR }} />} label="Facet" />
+            <LegendItem on={props.visibility.FACETS} onClick={() => props.toggleLayer('FACETS')} swatch={<span className="inline-block w-4 h-3 rounded-sm border border-red-400 bg-red-400/40" />} label="Facet – pitch not set" />
+            <LegendItem on={props.visibility.FACETS} onClick={() => props.toggleLayer('FACETS')} swatch={<span className="inline-block w-4 h-3 rounded-sm border border-yellow-300 bg-yellow-300/40" />} label="Facet – existing solar" />
+            <LegendItem on={props.visibility.PENETRATIONS} onClick={() => props.toggleLayer('PENETRATIONS')} swatch={<span className="inline-block w-3 h-3 rounded-full bg-rose-500 border-2 border-white" />} label="Penetration" />
+            {property.solar && (
+              <LegendItem on={props.visibility.SOLAR_BOXES} onClick={() => props.toggleLayer('SOLAR_BOXES')} swatch={<span className="inline-block w-4 h-3 border border-dashed border-slate-200" />} label="Google segment box (reference)" />
+            )}
+            <LegendItem on={props.visibility.LABELS} onClick={() => props.toggleLayer('LABELS')} swatch={<span className="inline-block text-[9px] font-mono bg-slate-700 px-0.5 rounded">12′</span>} label="Labels" />
+          </ul>
+        )}
       </div>
 
       {/* Draft HUD */}
@@ -279,6 +311,22 @@ export function RoofMap(props: Props) {
         </div>
       </div>
     </div>
+  );
+}
+
+function countOf(t: Takeoff | null, type: EdgeType) {
+  const es = t?.edges.filter((e) => e.type === type) ?? [];
+  return es.length ? ` · ${es.reduce((sum, e) => sum + polylineLengthFt(e.path), 0).toFixed(0)}′` : '';
+}
+
+function LegendItem({ on, onClick, swatch, label }: { on: boolean; onClick: () => void; swatch: React.ReactNode; label: string }) {
+  return (
+    <li>
+      <button onClick={onClick} aria-pressed={on} className={`w-full flex items-center gap-2 px-1 py-0.5 rounded hover:bg-slate-800 ${on ? 'text-slate-200' : 'text-slate-500 line-through'}`}>
+        <span className="w-5 flex justify-center">{swatch}</span>
+        {label}
+      </button>
+    </li>
   );
 }
 

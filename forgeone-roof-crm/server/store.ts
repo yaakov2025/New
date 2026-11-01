@@ -28,6 +28,10 @@ class Store {
     } catch (e) {
       console.error('[store] could not read data file, starting empty:', (e as Error).message);
     }
+    for (const p of this.data.properties) {
+      p.branch ??= '';
+      p.takeoff.existingSolar = { ...{ systemKw: null, inverterType: null, installYear: null, reroofCondition: null }, ...(p.takeoff.existingSolar as Partial<typeof p.takeoff.existingSolar>) } as typeof p.takeoff.existingSolar;
+    }
     this.purgeExpired();
     setInterval(() => this.purgeExpired(), 3600_000).unref();
   }

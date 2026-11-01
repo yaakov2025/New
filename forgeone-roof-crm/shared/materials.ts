@@ -2,7 +2,14 @@
 // missing (e.g. no pitch => no roof area) the line item reports null.
 import type { TakeoffTotals } from './measure.ts';
 
-export type MaterialSystem = 'ASPHALT_SHINGLE' | 'STANDING_SEAM_METAL';
+export type MaterialSystem = 'ASPHALT_SHINGLE' | 'STANDING_SEAM_METAL' | 'CONCRETE_TILE' | 'TPO_MEMBRANE';
+
+export const MATERIAL_SYSTEMS: Record<MaterialSystem, string> = {
+  ASPHALT_SHINGLE: 'Architectural asphalt shingle',
+  STANDING_SEAM_METAL: 'Standing seam metal (24ga)',
+  CONCRETE_TILE: 'Concrete / clay "S" tile',
+  TPO_MEMBRANE: 'TPO 60-mil membrane (low slope)',
+};
 
 export interface MaterialLine {
   key: string;
@@ -35,6 +42,18 @@ export const DEFAULT_PRICES: Record<string, number> = {
   rakeTrim: 26,
   highTempUnderlayment: 165,
   clips: 90,
+  fieldTile: 3.25,
+  tileCaps: 4.5,
+  tileUnderlayment: 110,
+  battens: 9,
+  tileScrews: 75,
+  birdStop: 14,
+  tpoRolls: 1150,
+  polyiso: 48,
+  plates: 160,
+  bondingAdhesive: 330,
+  edgeMetal: 38,
+  tpoFlashing: 155,
 };
 
 const ceil = (n: number | null) => (n === null ? null : Math.ceil(n - 1e-9));
@@ -69,6 +88,30 @@ export function materialLines(t: TakeoffTotals, o: MaterialOptions): MaterialLin
       line('valleyMetal', 'W-valley metal', 'valleys × 1.1 ÷ 10 ft/stick', ceil((valley * 1.1) / 10), 'stick'),
       line('nails', 'Coil nails', 'roof squares × waste ÷ 16 sq/box', ceil(sq === null ? null : sq / 16), 'box'),
       line('pipeBoots', 'Pipe boots', 'pipe vents marked on map', pipes, 'each'),
+    ];
+  }
+  if (o.system === 'CONCRETE_TILE') {
+    return [
+      line('fieldTile', 'Field tile', 'roof squares × waste × 90 tiles/sq', ceil(sq === null ? null : sq * 90), 'tile'),
+      line('tileCaps', 'Hip & ridge cap tile', '(ridges + hips) × 1.1 ÷ 1.4 ft/cap', ceil(((ridge + hip) * 1.1) / 1.4), 'cap'),
+      line('tileUnderlayment', 'Self-adhered underlayment (2 layers)', 'roof squares × waste × 2 ÷ 2 sq/roll', ceil(sq === null ? null : sq), 'roll'),
+      line('battens', '1×2 treated battens', 'roof area × waste ÷ 1.15 ft² per lf ÷ 8 ft', ceil(sq === null ? null : (sq * 100) / 1.15 / 8), 'piece'),
+      line('tileScrews', 'Tile screws (box of 1,000)', 'field tiles × 1 ÷ 1,000', ceil(sq === null ? null : (sq * 90) / 1000), 'box'),
+      line('birdStop', 'Eave bird stop', 'eaves × 1.05 ÷ 10 ft', ceil((eave * 1.05) / 10), 'piece'),
+      line('valleyMetal', 'Tile valley metal', 'valleys × 1.1 ÷ 10 ft', ceil((valley * 1.1) / 10), 'piece'),
+      line('pipeBoots', 'Lead pipe flashings', 'pipe vents marked on map', pipes, 'each'),
+    ];
+  }
+  if (o.system === 'TPO_MEMBRANE') {
+    const perim = eave + rake;
+    return [
+      line('tpoRolls', 'TPO 60-mil roll (10 ft × 100 ft = 10 sq)', 'roof squares × waste ÷ 10', ceil(sq === null ? null : sq / 10), 'roll'),
+      line('polyiso', '2.0" polyiso board (4×8 = 32 ft²)', 'roof area × waste ÷ 32', ceil(sq === null ? null : (sq * 100) / 32), 'board'),
+      line('plates', 'Plates & fasteners (box of 500)', 'boards × 8 ÷ 500', ceil(sq === null ? null : ((sq * 100) / 32) * 8 / 500), 'box'),
+      line('bondingAdhesive', 'Bonding adhesive (5 gal ≈ 2 sq)', 'perimeter / flashing zones – estimate 30% of area ÷ 2', ceil(sq === null ? null : (sq * 0.3) / 2), 'pail'),
+      line('edgeMetal', 'TPO-clad edge metal', 'roof perimeter (eaves + rakes) × 1.1 ÷ 10 ft', ceil((perim * 1.1) / 10), 'piece'),
+      line('tpoFlashing', 'Wall flashing membrane (6 in × 100 ft)', '(wall + step flashing) × 1.1 ÷ 100 ft', ceil(((t.edgeFt.WALL_FLASHING + t.edgeFt.STEP_FLASHING) * 1.1) / 100), 'roll'),
+      line('pipeBoots', 'Pre-molded pipe boots', 'pipe vents marked on map', pipes, 'each'),
     ];
   }
   return [

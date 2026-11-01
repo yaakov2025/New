@@ -127,6 +127,7 @@ api.post('/property/measure', async (req: Request, res: Response) => {
           id: id('prop'),
           inputAddress: address || geo.result.formattedAddress,
           formattedAddress: geo.result.formattedAddress,
+          branch: str(req.body?.branch, 60).trim(),
           placeId: geo.result.placeId,
           coordinates: null,
           addressValidation: null,
@@ -192,6 +193,10 @@ export function sanitizeTakeoff(b: any): Takeoff {
     existingSolar: {
       present: b?.existingSolar?.present === true ? true : b?.existingSolar?.present === false ? false : null,
       panelCount: isNum(b?.existingSolar?.panelCount) ? Math.max(0, Math.round(b.existingSolar.panelCount)) : null,
+      systemKw: isNum(b?.existingSolar?.systemKw) && b.existingSolar.systemKw >= 0 ? b.existingSolar.systemKw : null,
+      inverterType: ['MICROINVERTER', 'STRING_OPTIMIZERS', 'STRING', 'UNKNOWN'].includes(b?.existingSolar?.inverterType) ? b.existingSolar.inverterType : null,
+      installYear: isNum(b?.existingSolar?.installYear) && b.existingSolar.installYear >= 1980 && b.existingSolar.installYear <= 2100 ? Math.round(b.existingSolar.installYear) : null,
+      reroofCondition: ['GOOD', 'REPAIR_REQUIRED', 'DETACH_RESET', 'DECOMMISSION'].includes(b?.existingSolar?.reroofCondition) ? b.existingSolar.reroofCondition : null,
       notes: str(b?.existingSolar?.notes, 1000),
     },
     notes: str(b?.notes, 4000),
@@ -205,6 +210,15 @@ api.put('/properties/:id/takeoff', (req, res) => {
   if (!p) return void res.status(404).json({ error: 'Property not found' });
   p.takeoff = sanitizeTakeoff(req.body);
   p.status = p.takeoff.facets.length ? 'MEASURED' : 'NEW';
+  p.updatedAt = nowIso();
+  store.upsert(p);
+  res.json({ property: p });
+});
+
+api.patch('/properties/:id', (req, res) => {
+  const p = store.get(req.params.id);
+  if (!p) return void res.status(404).json({ error: 'Property not found' });
+  if (req.body?.branch !== undefined) p.branch = str(req.body.branch, 60).trim();
   p.updatedAt = nowIso();
   store.upsert(p);
   res.json({ property: p });

@@ -9,6 +9,8 @@ import { Sidebar } from './components/Sidebar.tsx';
 import { RoofMap } from './components/RoofMap.tsx';
 import { MeasurePanel } from './components/MeasurePanel.tsx';
 import { DiagnosticsModal } from './components/DiagnosticsModal.tsx';
+import { ComplianceModal } from './components/ComplianceModal.tsx';
+import { OverviewMap } from './components/OverviewMap.tsx';
 import type { LayerKey, Selection, Tool, Visibility } from './editor.ts';
 
 const initialVisibility = Object.fromEntries(
@@ -26,6 +28,8 @@ export default function App() {
   const [busy, setBusy] = useState(false);
   const [lookupError, setLookupError] = useState<string | null>(null);
   const [showDiag, setShowDiag] = useState(false);
+  const [showCompliance, setShowCompliance] = useState(false);
+  const [overview, setOverview] = useState(false);
 
   // Editor state for the selected property
   const [draft, setDraft] = useState<Takeoff | null>(null);
@@ -36,6 +40,7 @@ export default function App() {
   const [visibility, setVisibility] = useState<Visibility>(initialVisibility);
 
   const property = properties.find((p) => p.id === selectedId) ?? null;
+  const branches = [...new Set(properties.map((p) => p.branch).filter(Boolean))].sort();
   const draftRef = useRef(draft);
   draftRef.current = draft;
 
@@ -135,7 +140,7 @@ export default function App() {
   );
 
   const lookup = useCallback(
-    async (q: { placeId?: string; address?: string; forceRefresh?: boolean }) => {
+    async (q: { placeId?: string; address?: string; forceRefresh?: boolean; branch?: string }) => {
       setBusy(true);
       setLookupError(null);
       try {
@@ -143,6 +148,7 @@ export default function App() {
         const r = await api.measure(q);
         setProperties((ps) => [r.property, ...ps.filter((p) => p.id !== r.property.id)]);
         setSelectedId(r.property.id);
+        setOverview(false);
         // ensure editor reloads even if id unchanged (refresh)
         setDraft(structuredClone(r.property.takeoff));
       } catch (e) {
@@ -176,6 +182,12 @@ export default function App() {
     });
   }, [selectedId]);
 
+  const setBranch = useCallback(async (branch: string) => {
+    if (!selectedId) return;
+    const r = await api.setBranch(selectedId, branch);
+    setProperties((ps) => ps.map((p) => (p.id === r.property.id ? { ...p, branch: r.property.branch } : p)));
+  }, [selectedId]);
+
   const toggleLayer = useCallback((k: LayerKey) => setVisibility((v) => ({ ...v, [k]: !v[k] })), []);
 
   const saveLabel = { idle: '', dirty: 'Unsaved changes…', saving: 'Saving…', saved: 'All changes saved', error: 'Save FAILED – check server' }[saveState];
@@ -187,10 +199,21 @@ export default function App() {
   return (
     <APIProvider apiKey={config.browserKey} libraries={['places', 'marker', 'geometry']}>
       <div className="h-full flex flex-col overflow-hidden">
-        <Header usage={usage} sharedKeyWarning={config.sharedKeyWarning} onDiagnostics={() => setShowDiag(true)} saveState={saveLabel} />
+        <Header usage={usage} sharedKeyWarning={config.sharedKeyWarning} onDiagnostics={() => setShowDiag(true)} saveState={saveLabel} overview={overview} onOverview={() => setOverview((o) => !o)} onCompliance={() => setShowCompliance(true)} />
         <main className="flex-1 flex min-h-0">
-          <Sidebar properties={properties} selectedId={selectedId} onSelect={selectProperty} onDelete={remove} busy={busy} error={lookupError} onLookup={lookup} />
+          <Sidebar properties={properties} selectedId={selectedId} onSelect={selectProperty} onDelete={remove} busy={busy} error={lookupError} onLookup={lookup} branches={branches} />
           <div className="flex-1 min-w-0 h-full">
+            {overview ? (
+              <OverviewMap
+                properties={properties}
+                mapId={config.mapId}
+                selectedId={selectedId}
+                onPick={(id) => {
+                  void selectProperty(id);
+                  setOverview(false);
+                }}
+              />
+            ) : (
             <RoofMap
               property={property}
               takeoff={draft}
@@ -201,11 +224,13 @@ export default function App() {
               tool={tool}
               setTool={setTool}
               visibility={visibility}
+              toggleLayer={toggleLayer}
               canUndo={history.past.length > 0}
               canRedo={history.future.length > 0}
               onUndo={undo}
               onRedo={redo}
             />
+            )}
           </div>
           <MeasurePanel
             property={property}
@@ -217,9 +242,12 @@ export default function App() {
             toggleLayer={toggleLayer}
             onVerify={verify}
             onRefresh={() => property && lookup({ placeId: property.placeId ?? undefined, address: property.placeId ? undefined : property.formattedAddress, forceRefresh: true })}
+            onBranch={setBranch}
+            branches={branches}
             busy={busy}
           />
         </main>
+        {showCompliance && <ComplianceModal onClose={() => setShowCompliance(false)} />}
         {showDiag && <DiagnosticsModal property={property} takeoff={draft} config={config} onClose={() => setShowDiag(false)} />}
       </div>
     </APIProvider>

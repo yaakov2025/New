@@ -162,3 +162,34 @@ test('sanitizeTakeoff drops malformed input and clears verification', () => {
   assert.equal(t.verified, null);
   assert.equal(t.existingSolar.present, null);
 });
+
+test('tile and TPO material systems derive from measured totals only', () => {
+  const t = emptyTakeoff();
+  const p = rect(40, 30);
+  t.facets.push({ id: 'a', name: 'A', path: p, pitchRise: 0.5, pitchSource: 'MANUAL', hasExistingSolar: false });
+  t.edges.push({ id: 'e', type: 'EAVE', path: [p[0], p[1]] });
+  const tot = computeTotals(t);
+  const tpo = materialLines(tot, { system: 'TPO_MEMBRANE', wastePct: 10, prices: DEFAULT_PRICES });
+  const sq = tot.squares! * 1.1;
+  assert.equal(tpo.find((l) => l.key === 'tpoRolls')!.quantity, Math.ceil(sq / 10));
+  assert.equal(tpo.find((l) => l.key === 'edgeMetal')!.quantity, Math.ceil((40 * 1.1) / 10));
+  const tile = materialLines(tot, { system: 'CONCRETE_TILE', wastePct: 10, prices: DEFAULT_PRICES });
+  assert.equal(tile.find((l) => l.key === 'fieldTile')!.quantity, Math.ceil(sq * 90));
+  t.facets[0].pitchRise = null;
+  const none = materialLines(computeTotals(t), { system: 'TPO_MEMBRANE', wastePct: 10, prices: DEFAULT_PRICES });
+  assert.equal(none.find((l) => l.key === 'tpoRolls')!.quantity, null);
+});
+
+test('sanitizeTakeoff validates existing-solar details', () => {
+  const ok = sanitizeTakeoff({ existingSolar: { present: true, panelCount: 22.4, systemKw: 8.8, inverterType: 'MICROINVERTER', installYear: 2019, reroofCondition: 'DETACH_RESET' } });
+  assert.deepEqual(
+    { ...ok.existingSolar, notes: undefined },
+    { present: true, panelCount: 22, systemKw: 8.8, inverterType: 'MICROINVERTER', installYear: 2019, reroofCondition: 'DETACH_RESET', notes: undefined },
+  );
+  const bad = sanitizeTakeoff({ existingSolar: { present: 'yes', systemKw: -3, inverterType: 'X', installYear: 1900, reroofCondition: 'NOPE' } });
+  assert.equal(bad.existingSolar.present, null);
+  assert.equal(bad.existingSolar.systemKw, null);
+  assert.equal(bad.existingSolar.inverterType, null);
+  assert.equal(bad.existingSolar.installYear, null);
+  assert.equal(bad.existingSolar.reroofCondition, null);
+});

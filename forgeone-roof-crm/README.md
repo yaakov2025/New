@@ -80,6 +80,15 @@ required checks pass: at least one facet, every facet has a pitch, no self-inter
 eaves traced, existing-solar answered yes/no. Two warnings are shown but don't block:
 no ridges or hips, and traced area more than ±10% from Google's whole-roof area. Any edit clears verification.
 
+## Other features
+
+- **USA overview** (header button): every saved assessment as a pin, coloured by status. Click a pin to open it.
+- **Branches**: tag each property with a branch, filter the list by branch, and set a default branch for new lookups.
+- **Map views**: Satellite, Satellite + labels, Road map. Plus an on-map legend; click an entry to show or hide that layer.
+- **Existing solar**: yes/no, panel count, system kW, inverter type, install year, reroof condition (good / repair / detach & reset / decommission), notes, and which facets carry panels.
+- **Materials**: asphalt shingle, standing-seam metal, concrete/clay tile, TPO membrane. Waste factor and editable unit prices. Quantities come only from traced measurements.
+- **Compliance** (header button): what is stored and for how long, plus Google terms and cost notes.
+
 ## Map editor
 
 | Key | Tool |

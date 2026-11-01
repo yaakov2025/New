@@ -11,17 +11,33 @@ interface Props {
   onDelete: (id: string) => void;
   busy: boolean;
   error: string | null;
-  onLookup: (q: { placeId?: string; address?: string }) => void;
+  onLookup: (q: { placeId?: string; address?: string; branch?: string }) => void;
+  branches: string[];
 }
 
 export function Sidebar(p: Props) {
   const [filter, setFilter] = useState('');
-  const list = p.properties.filter((x) => (x.formattedAddress + x.inputAddress).toLowerCase().includes(filter.toLowerCase()));
+  const [branchFilter, setBranchFilter] = useState('');
+  const [newBranch, setNewBranch] = useState('');
+  const list = p.properties.filter(
+    (x) =>
+      (x.formattedAddress + x.inputAddress + x.branch).toLowerCase().includes(filter.toLowerCase()) &&
+      (!branchFilter || (branchFilter === '__none' ? !x.branch : x.branch === branchFilter)),
+  );
   return (
     <aside className="w-80 shrink-0 h-full flex flex-col bg-slate-900 border-r border-slate-800 min-h-0">
       <div className="p-4 border-b border-slate-800 space-y-3">
         <h2 className="text-xs font-bold text-slate-300 uppercase tracking-wider">New measurement</h2>
-        <AddressSearch busy={p.busy} onSubmit={p.onLookup} />
+        <AddressSearch busy={p.busy} onSubmit={(q) => p.onLookup({ ...q, branch: newBranch || undefined })} />
+        <input
+          value={newBranch}
+          onChange={(e) => setNewBranch(e.target.value)}
+          list="branch-list-new"
+          aria-label="Branch for new lookups"
+          placeholder="Branch for new lookups (optional)"
+          className="w-full bg-slate-800/70 border border-slate-700 rounded px-2 py-1 text-[11px] text-slate-200 placeholder-slate-500 focus:outline-none focus:border-cyan-500"
+        />
+        <datalist id="branch-list-new">{p.branches.map((b) => <option key={b} value={b} />)}</datalist>
         {p.busy && <p className="text-[11px] text-cyan-300">Calling Geocoding + Solar API on the server…</p>}
         {p.error && (
           <p role="alert" className="text-[11px] text-red-300 bg-red-950/40 border border-red-900 rounded p-2 break-words">
@@ -30,7 +46,17 @@ export function Sidebar(p: Props) {
         )}
       </div>
       <div className="px-4 pt-3 pb-2 flex items-center justify-between gap-2">
-        <h2 className="text-xs font-bold text-slate-300 uppercase tracking-wider">Saved assessments ({p.properties.length})</h2>
+        <h2 className="text-xs font-bold text-slate-300 uppercase tracking-wider">Saved assessments ({list.length})</h2>
+        <select
+          value={branchFilter}
+          onChange={(e) => setBranchFilter(e.target.value)}
+          aria-label="Filter by branch"
+          className="bg-slate-800 border border-slate-700 rounded px-1 py-0.5 text-[11px] text-slate-200 max-w-32"
+        >
+          <option value="">All branches</option>
+          {p.branches.map((b) => <option key={b} value={b}>{b}</option>)}
+          <option value="__none">No branch</option>
+        </select>
       </div>
       <div className="px-4 pb-2">
         <input
@@ -79,6 +105,7 @@ export function Sidebar(p: Props) {
                     <span className="flex items-center gap-1 text-amber-300"><AlertTriangle size={11} /> No Solar data</span>
                   )}
                   {t.squares !== null && <span className="font-mono text-slate-300">{t.squares.toFixed(1)} sq</span>}
+                  {x.branch && <span className="rounded bg-slate-700 px-1 text-slate-200">{x.branch}</span>}
                 </div>
               </div>
             </li>

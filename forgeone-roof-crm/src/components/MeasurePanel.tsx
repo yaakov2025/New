@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { CheckCircle2, Download, Eye, EyeOff, RefreshCw, ShieldCheck, Trash2, XCircle, AlertTriangle } from 'lucide-react';
-import type { EdgeType, PropertyRecord, Provenance, Takeoff } from '../../shared/types.ts';
+import type { EdgeType, InverterType, PropertyRecord, Provenance, ReroofCondition, Takeoff } from '../../shared/types.ts';
 import { EDGE_TYPES } from '../../shared/types.ts';
 import {
   M2_TO_FT2,
@@ -14,7 +14,7 @@ import {
   riseToDegrees,
   runChecks,
 } from '../../shared/measure.ts';
-import { DEFAULT_PRICES, materialLines, type MaterialSystem } from '../../shared/materials.ts';
+import { DEFAULT_PRICES, MATERIAL_SYSTEMS, materialLines, type MaterialSystem } from '../../shared/materials.ts';
 import { EDGE_STYLE, PENETRATION_LABEL, type LayerKey, type Selection, type Visibility } from '../editor.ts';
 import { downloadCsv } from '../csv.ts';
 
@@ -30,8 +30,23 @@ interface Props {
   toggleLayer: (k: LayerKey) => void;
   onVerify: () => void;
   onRefresh: () => void;
+  onBranch: (branch: string) => void;
+  branches: string[];
   busy: boolean;
 }
+
+const INVERTER_LABEL: Record<InverterType, string> = {
+  MICROINVERTER: 'Microinverters',
+  STRING_OPTIMIZERS: 'String + optimizers',
+  STRING: 'String / central',
+  UNKNOWN: 'Unknown',
+};
+export const REROOF_LABEL: Record<ReroofCondition, string> = {
+  GOOD: 'Good – leave in place',
+  REPAIR_REQUIRED: 'Repair required',
+  DETACH_RESET: 'Detach & reset required',
+  DECOMMISSION: 'Decommission / remove',
+};
 
 type Tab = 'summary' | 'facets' | 'edges' | 'google' | 'materials';
 
@@ -75,7 +90,7 @@ const Card = ({ title, children, right }: { title: string; children: React.React
   </section>
 );
 
-const n0 = (n: number) => Math.round(n).toLocaleString();
+const n0 = (n: number) => (Math.round(n) || 0).toLocaleString();
 const PITCHES = Array.from({ length: 49 }, (_, i) => i / 2); // 0 … 24 in 0.5 steps
 
 export function MeasurePanel(p: Props) {
@@ -89,6 +104,8 @@ export function MeasurePanel(p: Props) {
   }
   const prop = p.property;
   const solar = prop.solar;
+  const setSolar = (patch: Partial<Takeoff['existingSolar']>) => p.onChange((x) => ({ ...x, existingSolar: { ...x.existingSolar, ...patch } }));
+  const inp = 'bg-slate-800 border border-slate-700 rounded px-2 py-0.5 text-xs font-mono text-slate-100';
 
   return (
     <aside className="w-[400px] shrink-0 h-full flex flex-col bg-slate-900 border-l border-slate-800 min-h-0">
@@ -103,6 +120,20 @@ export function MeasurePanel(p: Props) {
           <span className="text-slate-600">·</span>
           <SolarBadge property={prop} />
         </div>
+        <label className="mt-2 flex items-center gap-2 text-[11px] text-slate-400">
+          Branch
+          <input
+            key={prop.id}
+            list="branch-list"
+            aria-label="Branch"
+            defaultValue={prop.branch}
+            placeholder="e.g. Denver"
+            onBlur={(e) => e.target.value.trim() !== prop.branch && p.onBranch(e.target.value.trim())}
+            onKeyDown={(e) => e.key === 'Enter' && (e.target as HTMLInputElement).blur()}
+            className="flex-1 bg-slate-800 border border-slate-700 rounded px-2 py-0.5 text-xs text-slate-100"
+          />
+        </label>
+        <datalist id="branch-list">{p.branches.map((b) => <option key={b} value={b} />)}</datalist>
       </div>
       <nav className="flex border-b border-slate-800 text-xs" role="tablist">
         {(['summary', 'facets', 'edges', 'google', 'materials'] as Tab[]).map((k) => (
@@ -171,16 +202,39 @@ export function MeasurePanel(p: Props) {
                 </div>
               </div>
               {t.existingSolar.present && (
-                <div className="flex items-center gap-2 pb-1">
-                  <label className="text-xs text-slate-400">Panel count</label>
-                  <input
-                    type="number"
-                    min={0}
-                    value={t.existingSolar.panelCount ?? ''}
-                    onChange={(e) => p.onChange((x) => ({ ...x, existingSolar: { ...x.existingSolar, panelCount: e.target.value === '' ? null : Number(e.target.value) } }))}
-                    className="w-20 bg-slate-800 border border-slate-700 rounded px-2 py-0.5 text-xs font-mono"
-                  />
-                  <span className="text-[10px] text-slate-500">Mark facets with panels in the Facets tab.</span>
+                <div className="grid grid-cols-2 gap-2 pb-1 text-[11px]" data-testid="solar-details">
+                  <label className="flex flex-col gap-0.5 text-slate-400">
+                    Panel count
+                    <input type="number" min={0} aria-label="Panel count" value={t.existingSolar.panelCount ?? ''}
+                      onChange={(e) => setSolar({ panelCount: e.target.value === '' ? null : Number(e.target.value) })} className={inp} />
+                  </label>
+                  <label className="flex flex-col gap-0.5 text-slate-400">
+                    System size (kW)
+                    <input type="number" min={0} step={0.1} aria-label="System size kW" value={t.existingSolar.systemKw ?? ''}
+                      onChange={(e) => setSolar({ systemKw: e.target.value === '' ? null : Number(e.target.value) })} className={inp} />
+                  </label>
+                  <label className="flex flex-col gap-0.5 text-slate-400">
+                    Inverter
+                    <select aria-label="Inverter type" value={t.existingSolar.inverterType ?? ''} onChange={(e) => setSolar({ inverterType: (e.target.value || null) as InverterType | null })} className={inp}>
+                      <option value="">—</option>
+                      {Object.entries(INVERTER_LABEL).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
+                    </select>
+                  </label>
+                  <label className="flex flex-col gap-0.5 text-slate-400">
+                    Install year
+                    <input type="number" min={1980} max={2100} aria-label="Install year" value={t.existingSolar.installYear ?? ''}
+                      onChange={(e) => setSolar({ installYear: e.target.value === '' ? null : Number(e.target.value) })} className={inp} />
+                  </label>
+                  <label className="col-span-2 flex flex-col gap-0.5 text-slate-400">
+                    Reroof condition
+                    <select aria-label="Reroof condition" value={t.existingSolar.reroofCondition ?? ''} onChange={(e) => setSolar({ reroofCondition: (e.target.value || null) as ReroofCondition | null })} className={inp}>
+                      <option value="">—</option>
+                      {Object.entries(REROOF_LABEL).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
+                    </select>
+                  </label>
+                  <input aria-label="Solar notes" placeholder="Solar notes (installer, warranty…)" value={t.existingSolar.notes}
+                    onChange={(e) => setSolar({ notes: e.target.value })} className={`col-span-2 ${inp}`} />
+                  <span className="col-span-2 text-[10px] text-slate-500">Mark which facets carry panels in the Facets tab.</span>
                 </div>
               )}
             </Card>
@@ -500,8 +554,9 @@ function MaterialsTab({ totals, property, takeoff }: { totals: ReturnType<typeof
     <div className="space-y-3">
       <div className="flex gap-2">
         <select value={system} onChange={(e) => setSystem(e.target.value as MaterialSystem)} className="flex-1 bg-slate-800 border border-slate-700 rounded px-2 py-1 text-xs">
-          <option value="ASPHALT_SHINGLE">Architectural asphalt shingle</option>
-          <option value="STANDING_SEAM_METAL">Standing seam metal</option>
+          {Object.entries(MATERIAL_SYSTEMS).map(([k, v]) => (
+            <option key={k} value={k}>{v}</option>
+          ))}
         </select>
         <select value={waste} onChange={(e) => setWaste(Number(e.target.value))} className="bg-slate-800 border border-slate-700 rounded px-2 py-1 text-xs" aria-label="Waste factor">
           {[5, 7, 10, 12, 15, 20].map((w) => (

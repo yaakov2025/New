@@ -38,7 +38,8 @@ export const api = {
   config: () => req<ClientConfig>('GET', '/api/config'),
   usage: () => req<Usage>('GET', '/api/usage'),
   list: () => req<{ properties: PropertyRecord[] }>('GET', '/api/properties'),
-  measure: (q: { address?: string; placeId?: string; forceRefresh?: boolean }) =>
+  setBranch: (id: string, branch: string) => req<{ property: PropertyRecord }>('PATCH', `/api/properties/${id}`, { branch }),
+  measure: (q: { address?: string; placeId?: string; forceRefresh?: boolean; branch?: string }) =>
     req<{ property: PropertyRecord; reused?: boolean }>('POST', '/api/property/measure', q),
   saveTakeoff: (id: string, t: Takeoff) => req<{ property: PropertyRecord }>('PUT', `/api/properties/${id}/takeoff`, t),
   verify: (id: string) => req<{ property: PropertyRecord; checks: VerificationCheck[] }>('POST', `/api/properties/${id}/verify`),

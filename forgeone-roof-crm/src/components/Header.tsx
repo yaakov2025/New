@@ -1,7 +1,7 @@
-import { Activity, Hammer, ShieldAlert } from 'lucide-react';
+import { Activity, Hammer, Map as MapIcon, Scale, ShieldAlert } from 'lucide-react';
 import type { Usage } from '../api.ts';
 
-export function Header(p: { usage: Usage | null; sharedKeyWarning: boolean; onDiagnostics: () => void; saveState: string }) {
+export function Header(p: { usage: Usage | null; sharedKeyWarning: boolean; onDiagnostics: () => void; saveState: string; overview: boolean; onOverview: () => void; onCompliance: () => void }) {
   return (
     <header className="h-12 shrink-0 flex items-center gap-4 px-4 bg-slate-900 border-b border-slate-800">
       <div className="flex items-center gap-2">
@@ -21,6 +21,12 @@ export function Header(p: { usage: Usage | null; sharedKeyWarning: boolean; onDi
             Today: Solar {p.usage.solar}/{p.usage.limits.solar} · Geocode {p.usage.geocode}/{p.usage.limits.geocode} · AddrVal {p.usage.addressValidation}/{p.usage.limits.addressValidation}
           </span>
         )}
+        <button onClick={p.onOverview} aria-pressed={p.overview} className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-semibold ${p.overview ? 'bg-cyan-700 border-cyan-500' : 'bg-slate-800 hover:bg-slate-700 border-slate-700'}`}>
+          <MapIcon size={14} /> {p.overview ? 'Back to roof' : 'USA overview'}
+        </button>
+        <button onClick={p.onCompliance} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-semibold">
+          <Scale size={14} className="text-cyan-400" /> Compliance
+        </button>
         <button onClick={p.onDiagnostics} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-semibold">
           <Activity size={14} className="text-cyan-400" /> API diagnostics
         </button>

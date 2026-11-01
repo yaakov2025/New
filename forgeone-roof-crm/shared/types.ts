@@ -71,10 +71,18 @@ export interface Penetration {
   position: LatLng;
 }
 
+export type InverterType = 'MICROINVERTER' | 'STRING_OPTIMIZERS' | 'STRING' | 'UNKNOWN';
+export type ReroofCondition = 'GOOD' | 'REPAIR_REQUIRED' | 'DETACH_RESET' | 'DECOMMISSION';
+
 export interface ExistingSolar {
   /** null = not inspected yet. Never inferred automatically. */
   present: boolean | null;
   panelCount: number | null;
+  systemKw: number | null;
+  inverterType: InverterType | null;
+  installYear: number | null;
+  /** What has to happen to the array for a reroof. */
+  reroofCondition: ReroofCondition | null;
   notes: string;
 }
 
@@ -164,6 +172,8 @@ export interface PropertyRecord {
   id: string;
   inputAddress: string;
   formattedAddress: string;
+  /** Branch / tenant label used to filter the pipeline (free text, e.g. "Denver"). */
+  branch: string;
   /** Tier 1 – may be stored indefinitely. */
   placeId: string | null;
   /** Tier 2 – purged 30 days after cachedAt. */
@@ -183,7 +193,7 @@ export function emptyTakeoff(): Takeoff {
     facets: [],
     edges: [],
     penetrations: [],
-    existingSolar: { present: null, panelCount: null, notes: '' },
+    existingSolar: { present: null, panelCount: null, systemKw: null, inverterType: null, installYear: null, reroofCondition: null, notes: '' },
     notes: '',
     verified: null,
     updatedAt: new Date().toISOString(),
